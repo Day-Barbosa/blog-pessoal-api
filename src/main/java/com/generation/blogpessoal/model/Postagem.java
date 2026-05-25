@@ -6,11 +6,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity // Define que a classe postagem vai se tornar uma tabela
 @Table(name = "tb_postagens") // Define o nome da tabela seguindo o padrão predefinido
@@ -31,6 +34,10 @@ public class Postagem {
 
     @UpdateTimestamp // Atualiza automaticamente com a data/hora da última modificação
     private LocalDateTime data;
+    
+    @ManyToOne
+    @JsonIgnoreProperties("Postagem")
+    private Tema tema;
 
     // Getters e Setters
     public Long getId() {
@@ -60,5 +67,12 @@ public class Postagem {
     public void setData(LocalDateTime data) {
         this.data = data;
     }
+	public Tema getTema() {
+		return tema;
+	}
+	public void setTema(Tema tema) {
+		this.tema = tema;
+	}
+    
 }
 
