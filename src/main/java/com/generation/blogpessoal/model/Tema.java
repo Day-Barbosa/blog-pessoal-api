@@ -25,10 +25,10 @@ public class Tema {
 	@NotBlank(message = "O Atributo Descrição é obrigatório")
 	private String descricao;
 	
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "tema", cascade = CascadeType.REMOVE)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tema", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties(value = "tema", allowSetters = true)
 	private List<Postagem> postagem;
-	
+
 	public Long getId() {
 		return this.id;
 	}

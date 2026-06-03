@@ -35,14 +35,19 @@ public class Postagem {
     @UpdateTimestamp // Atualiza automaticamente com a data/hora da última modificação
     private LocalDateTime data;
     
-    @ManyToOne
-    @JsonIgnoreProperties("Postagem")
+    @ManyToOne // Muitas postagens podem estar ligadas a um único tema
+    @JsonIgnoreProperties("postagem") // Evita recursividade ao buscar o tema da postagem
     private Tema tema;
+    
+    @ManyToOne // Muitas postagens podem estar ligadas a um único usuário
+    @JsonIgnoreProperties("postagem") // Evita recursividade ao buscar o usuário da postagem
+    private Usuario usuario;
 
     // Getters e Setters
     public Long getId() {
         return id;
     }
+    
     public void setId(Long id) {
         this.id = id;
     }
@@ -50,6 +55,7 @@ public class Postagem {
     public String getTitulo() {
         return titulo;
     }
+    
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
@@ -57,6 +63,7 @@ public class Postagem {
     public String getTexto() {
         return texto;
     }
+    
     public void setTexto(String texto) {
         this.texto = texto;
     }
@@ -64,15 +71,24 @@ public class Postagem {
     public LocalDateTime getData() {
         return data;
     }
+    
     public void setData(LocalDateTime data) {
         this.data = data;
     }
+    
 	public Tema getTema() {
 		return tema;
 	}
+	
 	public void setTema(Tema tema) {
 		this.tema = tema;
 	}
-    
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 }
-
