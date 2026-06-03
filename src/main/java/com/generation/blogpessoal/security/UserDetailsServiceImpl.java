@@ -11,12 +11,6 @@ import org.springframework.stereotype.Service;
 import com.generation.blogpessoal.model.Usuario;
 import com.generation.blogpessoal.repository.UsuarioRepository;
 
-/*	Classe de Serviço que busca os dados de um usuário
- * 	que está fazendo o Login/Autenticação e transforma 
- * 	em um objeto da Classe UserDetails, ou seja, no 
- * 	formato que a Spring Security entende. 
- * */
-
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 	

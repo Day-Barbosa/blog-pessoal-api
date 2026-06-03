@@ -29,7 +29,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Usuario>> getAll() {
         return ResponseEntity.ok(usuarioService.getAll());
     }
@@ -48,7 +48,7 @@ public class UsuarioController {
             .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @PutMapping
+    @PutMapping("/atualizar")
     public ResponseEntity<Usuario> put(@Valid @RequestBody Usuario usuario) {
         return usuarioService.atualizarUsuario(usuario)
             .map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
