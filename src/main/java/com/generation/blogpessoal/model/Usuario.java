@@ -25,7 +25,7 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Schema(example = "Juliana Andrews")
+    @Schema(example = "Juliana Silva")
     @NotBlank(message = "O Atributo Nome é Obrigatório!")
     private String nome;
 
