@@ -29,31 +29,34 @@ public class SwaggerConfig {
                     .name("Generation Brasil")
                     .url("https://brazil.generation.org/"))
                 .contact(new Contact()
-                    .name("Generation Brasil")
-                    .url("https://github.com/conteudoGeneration")
-                    .email("conteudogeneration@generation.org")))
+                    .name("Dayana Barbosa")
+                    .url("https://github.com/Day-Barbosa")
+                    .email("day_sbarbosa@outlook.com")))
             .externalDocs(new ExternalDocumentation()
-                .description("Github")
-                .url("https://github.com/conteudoGeneration/"))
+                .description("GitHub")
+                .url("https://github.com/Day-Barbosa/Blog_Pessoal"))
             .components(new Components()
-                    .addSecuritySchemes("jwt_auth", createSecurityScheme()))
-                .addSecurityItem(new SecurityRequirement().addList("jwt_auth"));
+                .addSecuritySchemes("jwt_auth", createSecurityScheme()))
+            .addSecurityItem(new SecurityRequirement().addList("jwt_auth"));
     }
 
     @Bean
     OpenApiCustomizer customerGlobalHeaderOpenApiCustomiser() {
         return openApi -> {
-            openApi.getPaths().values().forEach(pathItem -> pathItem.readOperations().forEach(operation -> {
-                ApiResponses apiResponses = operation.getResponses();
-                apiResponses.addApiResponse("200", createApiResponse("Sucesso!"));
-                apiResponses.addApiResponse("201", createApiResponse("Objeto Persistido!"));
-                apiResponses.addApiResponse("204", createApiResponse("Objeto Excluído!"));
-                apiResponses.addApiResponse("400", createApiResponse("Erro na Requisição!"));
-                apiResponses.addApiResponse("401", createApiResponse("Acesso Não Autorizado!"));
-                apiResponses.addApiResponse("403", createApiResponse("Acesso Proibido!"));
-                apiResponses.addApiResponse("404", createApiResponse("Objeto Não Encontrado!"));
-                apiResponses.addApiResponse("500", createApiResponse("Erro na Aplicação!"));
-            }));
+            openApi.getPaths().values().forEach(pathItem -> 
+                pathItem.readOperations().forEach(operation -> {
+                    ApiResponses apiResponses = operation.getResponses();
+
+                    apiResponses.addApiResponse("200", createApiResponse("Sucesso!"));
+                    apiResponses.addApiResponse("201", createApiResponse("Objeto Persistido!"));
+                    apiResponses.addApiResponse("204", createApiResponse("Objeto Excluído!"));
+                    apiResponses.addApiResponse("400", createApiResponse("Erro na Requisição!"));
+                    apiResponses.addApiResponse("401", createApiResponse("Acesso Não Autorizado!"));
+                    apiResponses.addApiResponse("403", createApiResponse("Acesso Proibido!"));
+                    apiResponses.addApiResponse("404", createApiResponse("Objeto Não Encontrado!"));
+                    apiResponses.addApiResponse("500", createApiResponse("Erro na Aplicação!"));
+                })
+            );
         };
     }
 
@@ -67,6 +70,6 @@ public class SwaggerConfig {
             .type(SecurityScheme.Type.HTTP)
             .scheme("bearer")
             .bearerFormat("JWT")
-            .description("Insira apenas o token JWT (a palavra 'Bearer' será adicionada automaticamente)");
+            .description("Insira apenas o token JWT. A palavra 'Bearer' será adicionada automaticamente.");
     }
 }
