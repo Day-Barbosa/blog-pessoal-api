@@ -20,11 +20,17 @@ import jakarta.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class SecurityConfig {
 
+	// Endpoints livres de validação de Token
     private static final String[] PUBLIC_ENDPOINTS = {
         "/usuarios/logar",
         "/usuarios/cadastrar",
         "/error/**",
-        "/", "/docs", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**"
+        "/", 
+        "/docs", 
+        "/swagger-ui/**", 
+        "/swagger-ui.html",
+        "/v3/api-docs/**", 
+        "/swagger-resources/**"
     };
 
     @Autowired	// Inversão/Injeção de Dependência
@@ -40,6 +46,10 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+    /*	Esse Recurso intercepta a Requisição, define quais endpoints serão
+     * 	sempre "filtrados" em busca do Token e envia a para a classe JWTAuthFilter
+     * 	para "filtrar" o token que foi enviado na Requisição.
+     * */ 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
