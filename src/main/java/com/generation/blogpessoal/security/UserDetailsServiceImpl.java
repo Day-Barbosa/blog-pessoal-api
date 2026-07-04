@@ -13,8 +13,8 @@ import com.generation.blogpessoal.repository.UsuarioRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-	
-	@Autowired	// Inversão/Injeção de Dependência
+
+	@Autowired
 	private UsuarioRepository usuarioRepository;
 
 	@Override
@@ -23,14 +23,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if (username == null || username.trim().isEmpty()) {
 			throw new UsernameNotFoundException("Usuário (e-mail) não pode ser vazio");
 		}
-		
+
 		Optional<Usuario> usuario = usuarioRepository.findByUsuario(username);
 
 		if (usuario.isPresent()) {
 			return new UserDetailsImpl(usuario.get());
-		}else {
+		} else {
 			throw new UsernameNotFoundException("Usuário não encontrado: " + username);
 		}
-			
+
 	}
 }
