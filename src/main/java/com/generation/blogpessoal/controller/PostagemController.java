@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.blogpessoal.model.Postagem;
 import com.generation.blogpessoal.repository.PostagemRepository;
+import com.generation.blogpessoal.repository.TemaRepository;
 
 import jakarta.validation.Valid;
 
@@ -32,6 +33,9 @@ public class PostagemController {
 	@Autowired // Injeta automaticamente a dependência (repository)
 
 	private PostagemRepository postagemRepository;
+
+	@Autowired
+	private TemaRepository temaRepository;
 
 	@GetMapping // Responde requisições HTTP GET
 	public ResponseEntity<List<Postagem>> getAll() {
@@ -52,6 +56,7 @@ public class PostagemController {
 	@PostMapping
 	public ResponseEntity<Postagem> post(@Valid @RequestBody Postagem postagem) {
 
+		validarTema(postagem);
 		postagem.setId(null);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(postagemRepository.save(postagem));
@@ -60,6 +65,11 @@ public class PostagemController {
 
 	@PutMapping
 	public ResponseEntity<Postagem> put(@Valid @RequestBody Postagem postagem) {
+	    if (postagem.getId() == null)
+	        return ResponseEntity.badRequest().build();
+
+	    validarTema(postagem);
+
 	    return postagemRepository.findById(postagem.getId())
 	        .map(resposta -> ResponseEntity.status(HttpStatus.OK)
 	            .body(postagemRepository.save(postagem)))
@@ -77,6 +87,11 @@ public class PostagemController {
 	    postagemRepository.deleteById(id);
 	}
 
-	
+	// Garante que a postagem aponta para um tema existente (evita erro 500 de chave estrangeira)
+	private void validarTema(Postagem postagem) {
+	    if (postagem.getTema() == null || postagem.getTema().getId() == null
+	            || !temaRepository.existsById(postagem.getTema().getId()))
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tema não encontrado!");
+	}
 
 }
