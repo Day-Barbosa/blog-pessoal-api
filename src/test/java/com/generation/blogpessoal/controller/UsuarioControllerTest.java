@@ -1,8 +1,10 @@
 package com.generation.blogpessoal.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -57,7 +59,7 @@ class UsuarioControllerTest {
 		Usuario usuario = TestBuilder.criarUsuario(null, "Paulo Antunes", "paulo_antunes@email.com.br", "12345678");
 		
 		// When
-		HttpEntity<Usuario> requisicao = new HttpEntity<>(usuario);
+		HttpEntity<Map<String, Object>> requisicao = new HttpEntity<>(TestBuilder.paraJson(usuario));
 		ResponseEntity<Usuario> resposta = testRestTemplate.exchange(
 				BASE_URL + "/cadastrar", HttpMethod.POST, requisicao, Usuario.class);
 		
@@ -75,7 +77,7 @@ class UsuarioControllerTest {
 		usuarioService.cadastrarUsuario(usuario);
 		
 		// When
-		HttpEntity<Usuario> requisicao = new HttpEntity<>(usuario);
+		HttpEntity<Map<String, Object>> requisicao = new HttpEntity<>(TestBuilder.paraJson(usuario));
 		ResponseEntity<Usuario> resposta = testRestTemplate.exchange(
 				BASE_URL + "/cadastrar", HttpMethod.POST, requisicao, Usuario.class);
 		
@@ -96,7 +98,7 @@ class UsuarioControllerTest {
 		
 		// When
 		String token = JwtHelper.obterToken(testRestTemplate, ADMIN, SENHA);
-		HttpEntity<Usuario> requisicao = JwtHelper.criarRequisicaoComToken(usuarioUpdate, token);
+		HttpEntity<Map<String, Object>> requisicao = JwtHelper.criarRequisicaoComToken(TestBuilder.paraJson(usuarioUpdate), token);
 		ResponseEntity<Usuario> resposta = testRestTemplate.exchange(
 				BASE_URL + "/atualizar", HttpMethod.PUT, requisicao, Usuario.class);
 		
@@ -124,6 +126,24 @@ class UsuarioControllerTest {
 		// Then
 		assertEquals(HttpStatus.OK, resposta.getStatusCode());
 		assertNotNull(resposta.getBody());
+	}
+
+	@Test
+	@DisplayName("✔ 05 - Não deve expor a senha nas respostas da API")
+	void naoDeveExporSenha() {
+
+		// Given
+		String token = JwtHelper.obterToken(testRestTemplate, ADMIN, SENHA);
+		HttpEntity<Void> requisicao = JwtHelper.criarRequisicaoComToken(token);
+
+		// When
+		ResponseEntity<String> resposta = testRestTemplate.exchange(
+				BASE_URL + "/all", HttpMethod.GET, requisicao, String.class);
+
+		// Then
+		assertEquals(HttpStatus.OK, resposta.getStatusCode());
+		assertNotNull(resposta.getBody());
+		assertFalse(resposta.getBody().contains("\"senha\""), "A resposta não deve conter o campo senha");
 	}
 
 }
